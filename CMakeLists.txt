@@ -69,6 +69,9 @@ OPTION( INSTALL_JAR "Set to OFF to skip build/install lcio.jar" OFF )
 # allow C++ only builds
 OPTION( LCIO_GENERATE_HEADERS "Set to OFF to use pre-generated headers (no java needed)" OFF)
 
+# build fio streaming
+OPTION( BUILD_FIO "Set to ON to build FIO streaming (requires c++14)" OFF)
+
 
 IF( INSTALL_JAR )
     INSTALL( CODE "EXECUTE_PROCESS( COMMAND ${CMAKE_BUILD_TOOL} jar)" )
@@ -257,6 +260,9 @@ endif()
 
 OPTION( BUILD_LCIO_EXAMPLES "Set to ON to build LCIO examples" ON )
 
+IF( BUILD_FIO )
+  ADD_SUBDIRECTORY( ./fio fio )  
+ENDIF()
 
 # lcio/sio libraries
 ADD_SUBDIRECTORY( ./sio sio )
