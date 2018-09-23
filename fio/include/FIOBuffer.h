@@ -11,8 +11,59 @@
 
 namespace fio {
 
+  struct standard_copy {
+  public:
+    typedef unsigned char buffer_type;
+    typedef std::size_t   size_type;
+
+    /// The standard std::memcpy call
+    /// plateform endianess -> plateform endianess
+    static void memcpy(
+      buffer_type*       destination,
+      const buffer_type* source,
+      size_type          size,
+      size_type          count);
+  };
+
+  struct big_endian_copy {
+  public:
+    typedef unsigned char buffer_type;
+    typedef std::size_t   size_type;
+
+    /// Copy data to 'destination' in big endian
+    /// plateform endianess -> big endian
+    static void memcpy(
+      buffer_type*       destination,
+      const buffer_type* source,
+      size_type          size,
+      size_type          count);
+  };
+
+  struct little_endian_copy {
+  public:
+    typedef unsigned char buffer_type;
+    typedef std::size_t   size_type;
+
+    /// Copy data to 'destination' in little endian
+    /// plateform endianess -> little endian
+    static void memcpy(
+      buffer_type*       destination,
+      const buffer_type* source,
+      size_type          size,
+      size_type          count);
+  };
+
+  /// buffer class
+  /// 
+  /// Main interface to write/read to/from a memory buffer.
+  /// The copy template argument allows for chosing a conversion
+  /// in a specific endianess. Default value is standard_copy,
+  /// meaning that the byte ordering is conserved. To target
+  /// big endian, use big_endian_copy and little_endian_copy
+  /// for little endian copy.
   template <class charT,
             class alloc = std::allocator<charT>,
+            class copy = standard_copy,
             class = typename std::enable_if<sizeof(charT)==1,charT>::type>
   class buffer {
     buffer() = delete;
@@ -23,6 +74,7 @@ namespace fio {
     // traits
     typedef charT                   char_type;
     typedef alloc                   allocator_type;
+    typedef copy                    copy_type;
     typedef int                     int_type;
     typedef std::size_t             pos_type;
     typedef long                    off_type;
@@ -30,6 +82,7 @@ namespace fio {
     typedef std::ios_base::seekdir  seek_dir;
     typedef std::ios_base::openmode open_mode;
     typedef std::ios_base::iostate  io_state;
+
     // constants
     static constexpr size_type      default_size = 2*1024*1024; // 2 Mo to start ...
     static constexpr size_type      default_expand = 1024*1024; // expanding
@@ -47,12 +100,12 @@ namespace fio {
     }
 
     /// Adopt/copy the buffer and set the buffer in read mode
-    inline buffer(char_type *bytes, size_type size, bool copy = false) {
+    inline buffer(char_type *bytes, size_type size, bool cpy = false) {
       if(nullptr == bytes) {
         setstate(std::ios_base::badbit);
         return;
       }
-      if(copy) {
+      if(cpy) {
         allocator_type allocator;
         m_buffer = allocator.allocate(size);
         std::memcpy(m_buffer, bytes, size);
@@ -110,8 +163,8 @@ namespace fio {
       }
       std::memcpy(m_buffer, data, size);
       m_size = size;
-      setstate(std::ios_base::goodbit);
       m_current = m_buffer;
+      clear_state();
       return m_size;
     }
 
@@ -175,6 +228,7 @@ namespace fio {
         std::memset(bytes, 0, newlen);
       }
       m_buffer = bytes;
+      clear_state();
       return len;
     }
 
@@ -202,8 +256,7 @@ namespace fio {
         total = rem;
         setstate(std::ios_base::eofbit);
       }
-      // TODO implement endian-agnostic read from buffer
-      std::memcpy(data, m_current, total);
+      copy_type::memcpy(data, m_current, memlen, count);
       m_current += total;
       return total;
     }
@@ -234,8 +287,7 @@ namespace fio {
           return 0;
         }
       }
-      // TODO implement endian-agnostic write in buffer
-      std::memcpy(m_current, data, total);
+      copy_type::memcpy(m_current, data, memlen, count);
       m_current += total;
       return total;
     }
