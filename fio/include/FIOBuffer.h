@@ -160,11 +160,21 @@ namespace fio {
     /// Expand the buffer by adding 'len' char at the end of buffer
     /// Returns the number of char added
     inline size_type expand(size_type len) {
+      if(0 == len) {
+        return 0;
+      }
       // TODO add more checks here
       allocator_type allocator;
-      char_type* bytes = allocator.allocate(len + m_size);
-      std::memcpy(bytes, m_buffer, m_size);
-      delete [] m_buffer;
+      size_type newlen = m_size + len;
+      char_type* bytes = allocator.allocate(newlen);
+      if(nullptr != m_buffer) {
+        std::memcpy(bytes, m_buffer, m_size);
+        std::memset(bytes + m_size, 0, len);
+        delete [] m_buffer;
+      }
+      else {
+        std::memset(bytes, 0, newlen);
+      }
       m_buffer = bytes;
       return len;
     }
