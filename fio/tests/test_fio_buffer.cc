@@ -1,5 +1,5 @@
 
-#include <FIOBuffer.h>
+#include <fio/buffer.h>
 
 #define do_test(name, boolean) \
   { \
