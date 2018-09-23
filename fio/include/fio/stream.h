@@ -18,6 +18,13 @@
 
 namespace fio {
 
+  struct record_info {
+    types::option_word        m_options{0};
+    types::size_type          m_length{0};
+    types::size_type          m_clength{0};
+    std::string               m_name{};
+  };
+
   /// stream class.
   ///
   /// Main interface to file stream (read or write)
@@ -76,10 +83,16 @@ namespace fio {
     }
 
     /// open a file
-    error_code::code_type open(const std::string& fn, io::open_mode mode) noexcept;
+    error_codes::code_type open(const std::string& fn, io::open_mode mode) noexcept;
 
     /// close the file
-    error_code::code_type close() noexcept;
+    error_codes::code_type close() noexcept;
+
+    ///
+    error_codes::code_type read_next_record_info(record_info &info);
+
+  private:
+    
 
   private:
     /// The stream open mode
