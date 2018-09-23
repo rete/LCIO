@@ -23,8 +23,8 @@ namespace fio {
   /// big endian, use big_endian_copy and little_endian_copy
   /// for little endian copy.
   template <class charT,
-            class alloc = std::allocator<charT>,
             class copy = standard_copy,
+            class alloc = std::allocator<charT>,
             class = typename std::enable_if<sizeof(charT)==1,charT>::type>
   class buffer {
     buffer() = delete;
