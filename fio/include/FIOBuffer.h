@@ -41,7 +41,7 @@ namespace fio {
       m_buffer = allocator.allocate(size);
       m_size = size;
       m_memsize = size;
-      std::fill(m_buffer, m_buffer+m_size, char_type{});
+      std::memset(m_buffer, 0, m_size);
       m_current = m_buffer;
       m_mode = std::ios_base::out | std::ios_base::binary;
     }
@@ -163,7 +163,6 @@ namespace fio {
       if(0 == len) {
         return 0;
       }
-      // TODO add more checks here
       allocator_type allocator;
       size_type newlen = m_size + len;
       char_type* bytes = allocator.allocate(newlen);
