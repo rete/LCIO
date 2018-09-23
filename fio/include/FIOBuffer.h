@@ -9,52 +9,13 @@
 #include <iostream>
 #include <type_traits>
 
+// -- fio headers
+#include <fio/copy.h>
+
 namespace fio {
 
-  struct standard_copy {
-  public:
-    typedef unsigned char buffer_type;
-    typedef std::size_t   size_type;
-
-    /// The standard std::memcpy call
-    /// plateform endianess -> plateform endianess
-    static void memcpy(
-      buffer_type*       destination,
-      const buffer_type* source,
-      size_type          size,
-      size_type          count);
-  };
-
-  struct big_endian_copy {
-  public:
-    typedef unsigned char buffer_type;
-    typedef std::size_t   size_type;
-
-    /// Copy data to 'destination' in big endian
-    /// plateform endianess -> big endian
-    static void memcpy(
-      buffer_type*       destination,
-      const buffer_type* source,
-      size_type          size,
-      size_type          count);
-  };
-
-  struct little_endian_copy {
-  public:
-    typedef unsigned char buffer_type;
-    typedef std::size_t   size_type;
-
-    /// Copy data to 'destination' in little endian
-    /// plateform endianess -> little endian
-    static void memcpy(
-      buffer_type*       destination,
-      const buffer_type* source,
-      size_type          size,
-      size_type          count);
-  };
-
   /// buffer class
-  /// 
+  ///
   /// Main interface to write/read to/from a memory buffer.
   /// The copy template argument allows for chosing a conversion
   /// in a specific endianess. Default value is standard_copy,
