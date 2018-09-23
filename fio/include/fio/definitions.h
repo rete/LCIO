@@ -9,19 +9,21 @@ namespace fio {
   struct types {
   public:
 #if defined(__alpha__) || defined(_M_ALPHA) || defined(_LP64)
-    typedef std::size_t                   address;
+    typedef std::size_t                   address_type;
 #else
-    typedef unsigned int                  address;
+    typedef unsigned int                  address_type;
 #endif
-    typedef void                          ptr;
-    typedef std::map<ptr*, ptr*>          pointed_at;
-    typedef std::multimap<ptr*, ptr*>     pointer_to;
+    typedef void                          ptr_type;
+    typedef std::map<ptr_type*, ptr_type*>          pointed_at;
+    typedef std::multimap<ptr_type*, ptr_type*>     pointer_to;
     // re: keep this for backward compatibility with SIO
 #if defined(_AIX) ||  defined(__alpha__) || defined(__i386__) || defined(__sparc__) || defined(__APPLE_CC__) || defined(_LP64)
     typedef long long                     int64;
 #else
     typedef __int64                       int64;
 #endif
+    typedef unsigned int                  option_word;
+    typedef unsigned int                  size_type;
 
   public:
     /// Cast any pointer to unsigned char
