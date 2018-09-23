@@ -46,7 +46,7 @@ namespace fio {
 
     // constants
     static constexpr size_type      default_size = 2*1024*1024; // 2 Mo to start ...
-    static constexpr size_type      default_expand = 1024*1024; // expanding
+    static constexpr size_type      default_expand = 1024*1024; // buffer expand size
 
   public:
     /// Allocate a buffer in write mode
