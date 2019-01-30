@@ -37,7 +37,5 @@ void lcio_unexpected(){
     if( ! _me ){
       _me = new LCIOExceptionHandler ;
     }
-
-    return _me ;
   }
 }
