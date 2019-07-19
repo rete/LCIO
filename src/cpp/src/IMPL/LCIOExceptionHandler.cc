@@ -1,3 +1,4 @@
+
 #include <exception> 
 #include <iostream>
 #include <cstdlib>
@@ -5,37 +6,22 @@
 
 namespace IMPL {
 
-
-  // create one globale instance of the handler
-  LCIOExceptionHandler* LCIOExceptionHandler::_me = 0 ;
-
-
-/** Method catches any std::exception, prints the message to stdout
- * and then exits the program. 
- */
-void lcio_unexpected(){
-  
-  try{
-    
-    throw ;
-    
-  }catch( std::exception& e){
-    
-    std::cout << " A runtime error has occured : " 
-	      << e.what() 
-	      << std::endl
-	      << " the program will have to be terminated - sorry." << std::endl ;
-    exit(1) ;
+  void LCIOExceptionHandler::setupHandlers() {
+    // thread safe functions ... but deprecated functions ...
+    // std::set_unexpected( &LCIOExceptionHandler::handler ) ;
+    // std::set_terminate( &LCIOExceptionHandler::handler ) ;
   }
-}
-
-  LCIOExceptionHandler::LCIOExceptionHandler(){}
-    
-
-  LCIOExceptionHandler* LCIOExceptionHandler::createInstance(){
-
-    if( ! _me ){
-      _me = new LCIOExceptionHandler ;
+  
+  void LCIOExceptionHandler::handler() {
+    try {
+      throw ;
+    }
+    catch( std::exception& e) {      
+      std::cout << " A runtime error has occured : " 
+          << e.what() 
+          << std::endl
+          << " the program will have to be terminated - sorry." << std::endl ;
+      exit(1) ;
     }
   }
 }
