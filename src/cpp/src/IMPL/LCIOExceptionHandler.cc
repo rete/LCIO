@@ -7,15 +7,9 @@
 namespace IMPL {
 
   void LCIOExceptionHandler::setupHandlers() {
-<<<<<<< HEAD
     // thread safe functions ... but deprecated functions ...
     // std::set_unexpected( &LCIOExceptionHandler::handler ) ;
     // std::set_terminate( &LCIOExceptionHandler::handler ) ;
-=======
-    // thread safe functions ...
-    std::set_unexpected( &LCIOExceptionHandler::handler ) ;
-    std::set_terminate( &LCIOExceptionHandler::handler ) ;
->>>>>>> 72badf9a804de11c61dd5b9f33f1e22894d378f4
   }
   
   void LCIOExceptionHandler::handler() {
