@@ -180,6 +180,26 @@ namespace SIO {
       (*iter)->processEvent( eventImpl ) ;
       iter++ ;
     }
+
+    
+    // // reached end of file. Need to close the current and open the next if available
+    // if( e.code() == sio::error_code::eof ) {
+    //   if( !_myFilenames.empty()  && _currentFileIndex+1 < _myFilenames.size()  ) {
+    //     close() ;
+    //     open( _myFilenames[ ++_currentFileIndex  ] ) ;
+    //     try {
+    //       return readNextEvent(accessMode) ;            
+    //     }
+    //     catch( sio::exception &e2 ) {
+    //       if( e2.code() == sio::error_code::eof ) {
+    //         return nullptr ;
+    //       }
+    //       SIO_RETHROW( e2, e2.code(), "Couldn't read next event!" ) ;
+    //     }
+    //   }
+    //   return nullptr ;
+    // }
+    // SIO_RETHROW( e, e.code(), "Couldn't read next event!" ) ;
   }
   
   //----------------------------------------------------------------------------
