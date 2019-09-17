@@ -492,41 +492,39 @@ namespace MT {
         // free ressources here
         event = nullptr ;
       }
-      return ( recordsRead < maxRecord ) ;
+      return (recordsRead < maxRecord) ;
     } ;
-    while( 1 ) {
-      try {
-        sio::api::read_records( _stream, *_rawBuffer, validator , processor ) ;
+    try {
+      sio::api::read_records( _stream, *_rawBuffer, validator , processor ) ;
+    }
+    catch( sio::exception &e ) {
+      if( e.code() != sio::error_code::eof ) {
+        SIO_RETHROW( e, e.code(), "SIOReader::readStream: Couldn't read stream" ) ;
       }
-      catch( sio::exception &e ) {
-        if( e.code() != sio::error_code::eof ) {
-          SIO_RETHROW( e, e.code(), "SIOReader::readStream: Couldn't read stream" ) ;
-        }
-        else {
-          // we caught an eof exception here
-          bool nextFileAvailable = (!_myFilenames.empty()  && _currentFileIndex+1 < _myFilenames.size()) ;
-          if( nextFileAvailable ) {
-            close() ;
-            open( _myFilenames[ ++_currentFileIndex  ] ) ;
-            if( readUntilEOF ) {
-              // read all
-              readStream( listeners, maxRecord ) ;
-            }
-            else {
-              // read the remaining number of records
-              readStream( listeners, maxRecord - recordsRead ) ;
-            }
-            return ;
+      else {
+        // we caught an eof exception here
+        bool nextFileAvailable = (!_myFilenames.empty()  && _currentFileIndex+1 < _myFilenames.size()) ;
+        if( nextFileAvailable ) {
+          close() ;
+          open( _myFilenames[ ++_currentFileIndex  ] ) ;
+          if( readUntilEOF ) {
+            // read all
+            readStream( listeners, maxRecord ) ;
           }
           else {
-            if( readUntilEOF ) {
-              return ;
-            }
-            std::stringstream message ;
-            message << "SIOReader::readStream(int maxRecord) : EOF before "
-              << maxRecord << " records read from file" << std::ends ;
-            throw IO::EndOfDataException( message.str() )  ;
+            // read the remaining number of records
+            readStream( listeners, maxRecord - recordsRead ) ;
           }
+          return ;
+        }
+        else {
+          if( readUntilEOF ) {
+            return ;
+          }
+          std::stringstream message ;
+          message << "SIOReader::readStream(int maxRecord) : EOF before "
+            << maxRecord << " records read from file" << std::ends ;
+          throw IO::EndOfDataException( message.str() )  ;
         }
       }
     }
