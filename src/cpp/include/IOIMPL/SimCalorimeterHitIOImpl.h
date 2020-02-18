@@ -6,7 +6,7 @@
 namespace SIO{
 
   class SIOSimCalHitHandler ;
-
+  class SIOSimCalCollectionHandler ;
 }
 
 namespace IOIMPL {
@@ -21,6 +21,7 @@ namespace IOIMPL {
   class SimCalorimeterHitIOImpl : public IMPL::SimCalorimeterHitImpl {
     
     friend class SIO::SIOSimCalHitHandler ;
+    friend class SIO::SIOSimCalCollectionHandler ;
     
   }; // class
 

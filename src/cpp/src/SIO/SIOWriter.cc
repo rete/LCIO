@@ -128,6 +128,7 @@ namespace SIO {
     SIOEventHeaderRecord::writeRecord( _rawBuffer, const_cast<EVENT::LCEvent*>(evt), rechdrinfo, 0 ) ;
     // deal with zlib compression here
     if( _compressor.level() != 0 ) {
+      std::cout << "Compressing and writing event header with level " << _compressor.level() << std::endl ;
       sio::api::compress_record( rechdrinfo, _rawBuffer, _compBuffer, _compressor ) ;
       sio::api::write_record( _stream, _rawBuffer.span(0, rechdrinfo._header_length), _compBuffer.span(), rechdrinfo ) ;
     }

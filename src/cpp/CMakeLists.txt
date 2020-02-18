@@ -83,6 +83,7 @@ SET( LCIO_SIO_SRCS
   ./src/SIO/SIOReconstructedParticleHandler.cc
   ./src/SIO/SIORunHeaderHandler.cc
   ./src/SIO/SIOSimCalHitHandler.cc
+  ./src/SIO/SIOSimCalCollectionHandler.cc
   ./src/SIO/SIOSimTrackHitHandler.cc
   ./src/SIO/SIOTPCHitHandler.cc
   ./src/SIO/SIOTrackHandler.cc
@@ -474,6 +475,7 @@ ADD_LCIO_EXAMPLE( lcio_perf )
 ADD_LCIO_EXAMPLE( lcio_read_perf )
 ADD_LCIO_EXAMPLE( lcio_parallel_read ) 
 ADD_LCIO_EXAMPLE( lcio_parallel_processing ) 
+ADD_LCIO_EXAMPLE( lcio_rewrite )
 
 IF( BUILD_LCIO_EXAMPLES )
   ADD_LCIO_EXAMPLE( lcrtrelation )

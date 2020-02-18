@@ -3,6 +3,7 @@
 #include <SIO/SIORunHeaderHandler.h>
 #include <SIO/SIOEventHandler.h>
 #include <SIO/SIOCollectionHandler.h>
+#include <SIO/SIOSimCalCollectionHandler.h>
 #include <SIO/SIORandomAccessHandler.h>
 #include <SIO/SIOIndexHandler.h>
 #include <EVENT/LCEvent.h>
@@ -58,10 +59,17 @@ namespace SIO {
       if( ( not colsOnly.empty() ) and ( colsOnly.end() == colsOnly.find(collectionName) ) ) {
         continue ;
       }
-      auto handler = handlerMgr.getHandler( collection->getTypeName() ) ;
-      auto block = std::make_shared<SIOCollectionHandler>( collectionName, handler ) ;
-      block->setCollection( collection );
-      blocks.push_back( block ) ;
+      if( collection->getTypeName() == EVENT::LCIO::SIMCALORIMETERHIT ) {
+        auto block = std::make_shared<SIOSimCalCollectionHandler>( collectionName ) ;
+        block->setCollection( collection );
+        blocks.push_back( block ) ;   
+      }
+      else {
+        auto handler = handlerMgr.getHandler( collection->getTypeName() ) ;
+        auto block = std::make_shared<SIOCollectionHandler>( collectionName, handler ) ;
+        block->setCollection( collection );
+        blocks.push_back( block ) ;        
+      }
     }
   }
 
